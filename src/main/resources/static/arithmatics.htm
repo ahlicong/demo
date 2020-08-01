@@ -1,0 +1,109 @@
+<script language="javascript">
+function $(id) {
+	return document.getElementById(id);
+}
+
+var total, remain, correct;
+var startTime;
+
+function init() {
+	total = $("total").value;
+	if (isNaN(parseInt(total)) || total < 1)
+		return;
+	$("startBtn").disabled = true;
+	remain = total;
+	correct = 0;
+}
+
+function startQuiz() {
+	init();
+	var sheet = "";
+	for (var i = 0; i < total; i++) {
+		switch(genOption()) {
+			case 0: sheet += genQuestion0(i); break;
+			case 1: sheet += genQuestion1(i); break;
+		}
+	}
+	//$("console").value = sheet;
+	$("quiz").innerHTML = sheet;
+	startTime = new Date();
+	setTimeout(function() { $('q0').focus(); }, 0);
+	$("result").innerHTML = "";
+}
+
+function genQuestion(index, operator, number1, number2, answer) {
+	var result = (index + 1) + ": " + number1 + " " + operator + " " + number2 + " = ";
+	result += "<input id=q" + index + " ans=" + answer + " size=5 maxlength=5 onblur=answer(this) />";
+	result += "<div id=a" + index + "></div>\n";
+	return result;
+}
+
+function genQuestion0(index) {
+	var int1, int2, answer;
+	do {
+		int1 = genInt(11, 99);
+		int2 = genInt(101, 999);
+		answer = int1 * int2;
+	} while(false);
+	return genQuestion(index, "x", int1, int2, answer);
+}
+
+function genQuestion1(index) {
+	var int1, int2, answer, remainder;
+	do {
+		int2 = genInt(11, 99);
+		answer = genInt(2, 99);
+		remainder = genInt(0, int2 - 1);
+		int1 = int2 * answer + remainder;
+	} while(int1 > 999);
+	return genQuestion(index, "/", int1, int2, answer + ":" + remainder);
+}
+
+function genInt(min, max) {
+	var range = max - min;
+	var offset = min;
+	return Math.round(Math.random() * range) + offset;
+}
+
+function genOption() {
+	return genInt(0, 1);
+}
+
+function answer(q) {
+	if (q.value == "")
+		return;
+	if (q.value == q.ans) {
+		//alert("correct");
+		correct++;
+	}
+	q.disabled = "true";
+	if (--remain == 0)
+		finish();
+}
+
+function finish() {
+	var result = "";
+	result += Math.round((new Date() - startTime) / 1000) + "s ";
+	result += Math.round(correct * 100 / total) + "%";
+	$("result").innerHTML = "<h1>" + result + "</h1>";
+
+	for (var i = 0; i < total; i++) {
+		var q = $("q" + i);
+		if (q.value != q.ans)
+			$("a" + i).innerHTML = "<font color=red>" + q.ans + "</font>";
+	}
+	$("startBtn").disabled = false;
+}
+
+document.onkeyup = function() {
+	if (event.keyCode == 13 && !$("startBtn").disabled)
+		startQuiz();
+}	
+</script>
+
+<input id="finishBtn" type="button" value="Finish" onclick="finish()" />
+<div id="quiz"></div>
+<div id="result"></div>
+<!-- <textarea id="console" rows=20 cols=80></textarea> -->
+#<input id="total" value="20" size="3" maxlength="3" />
+<input id="startBtn" type="button" value="Start Quiz" onclick="startQuiz()" title="Press Enter" />

@@ -1,0 +1,109 @@
+<script src="js/jquery-3.5.1.min.js"></script>
+<script lang="javascript">
+var MAX = 99, MIN = 1, RANGE = MAX - MIN;
+var total, remain, correct;
+var subtraction;
+var startTime, consume;
+function startQuiz() {
+	total = document.getElementById("total").value;
+	if (isNaN(parseInt(total)) || total < 1)
+		return;
+	document.getElementById("startBtn").disabled = true;
+	subtraction = document.getElementById("subtraction").checked;
+	remain = total;
+	correct = 0;
+
+	var sheet = "";
+	var int1, int2, operator, answer;
+	for (var i = 0; i < total; i++) {
+		do {
+			int1 = genInt();
+			int2 = genInt();
+			operator = genOperator();
+			q = int1 + " " + operator + " " + int2;
+			answer = eval(q);
+			//if (operator == "+")
+			//	answer = int1 + int2;
+			//else
+			//	answer = int1 - int2;
+		} while(answer < MIN || answer > MAX);
+		sheet += "<font color=grey>" + (i+1) + ": </font>" + q + " = ";
+		sheet += "<input id=q" + i + " ans=" + answer + " size=3 maxlength=2 onblur=answer(this) />";
+		sheet += "<div id=a" + i + "></div>\n";
+	}
+	//document.getElementById("console").value = sheet;
+	document.getElementById("quiz").innerHTML = sheet;
+	setTimeout(function() { document.getElementById('q0').focus(); }, 0);
+	document.getElementById("result").innerHTML = "";
+	startTime = new Date();
+}
+
+function genInt() {
+	return Math.round(Math.random() * RANGE) + MIN;
+}
+
+function genOperator() {
+	if (subtraction)
+		return Math.random() > 0.5 ? "+" : "-";
+	return "+";
+}
+
+function answer(q) {
+	if (q.value == "")
+		return;
+	if (q.value == q.attributes["ans"].value) {
+		//alert("correct");
+		correct++;
+	}
+	q.disabled = "true";
+	if (--remain == 0)
+		finish();
+}
+
+function finish() {
+	consume = Math.round((new Date() - startTime) / 1000);
+	var result = "";
+	result += consume + "s ";
+	result += Math.round(correct * 100 / total) + "%";
+	document.getElementById("result").innerHTML = "<h1>" + result + "</h1>";
+
+	for (var i = 0; i < total; i++) {
+		var q = document.getElementById("q" + i);
+		if (q.value != q.attributes["ans"].value)
+			document.getElementById("a" + i).innerHTML = "<font color=red>" + q.attributes["ans"].value + "</font>";
+	}
+	document.getElementById("startBtn").disabled = false;
+	saveResult();
+}
+
+function saveResult() {
+	$.ajax({
+		url: "saveResult",
+		type: "post",
+		data: JSON.stringify({
+			"username": "liyingxin",
+		    "correct": correct,
+		    "total": total,
+		    "consume": consume
+		}),
+		contentType: "application/json"
+	})
+//	.error(function() { alert("error"); })
+}
+
+document.onkeyup = function() {
+	if (event.keyCode == 13 && !document.getElementById("startBtn").disabled)
+		startQuiz();
+}	
+</script>
+
+<div id="quiz"></div>
+<div id="result"></div>
+<!-- <textarea id="console" rows=20 cols=80></textarea> -->
+#
+<input id="total" value="20" size="1" maxlength="3" />
+<input type="checkbox" checked disabled />
++
+<input type="checkbox" checked id="subtraction" />
+-
+<input id="startBtn" type="button" value="Start Quiz" onclick="startQuiz()" title="Press Enter" />
