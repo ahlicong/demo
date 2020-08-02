@@ -21,7 +21,7 @@ public class GreetingController {
 	private Dao dao;
 
 	@GetMapping("/greeting")
-	public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+	public Greeting greeting(@RequestParam(value = "username", defaultValue = "World") String name) {
 		long count = counter.incrementAndGet();
 		dao.insertTest(count, name);
 		return new Greeting(count, String.format(template, name));

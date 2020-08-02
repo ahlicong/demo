@@ -1,7 +1,17 @@
 <title>demo</title>
 
+<script>
+var param = window.location.href.split("?")[1];
+function navigate(url) {
+	window.location = url + "?" + param;
+}
+</script>
+
 <body>
-<a href="greeting?name=User">�ʺ�</a>
-<a href="quiz.htm">�Ӽ�</a>
-<a href="arithmatics.htm">�˳�</a>
+<a href="#" onclick="navigate('greeting')">问候</a><br>
+<a href="#" onclick="navigate('quiz.htm')">加减</a>
+<a href="#" onclick="navigate('quiz.htm')">成绩单</a>
+<a href="#" onclick="navigate('quiz.htm')">排行榜</a><br>
+<a href="#" onclick="navigate('arithmatics.htm')">乘除</a><br>
+licong75@qq.com
 </body>
