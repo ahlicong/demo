@@ -20,8 +20,8 @@ public class Dao {
 	}
 	
 	public void insertResult(ResultDto result) {
-		String sql = "insert into results(username, correct, total, consume, create_time) values(?,?,?,?,now())";
-		jdbcTemplate.update(sql, result.getUsername(), result.getCorrect(), result.getTotal(), result.getConsume());
+		String sql = "insert into results(username, operand, correct, total, consume, create_time) values(?,?,?,?,?,now())";
+		jdbcTemplate.update(sql, result.getUsername(), result.getOperand(), result.getCorrect(), result.getTotal(), result.getConsume());
 	}
 	
 	public List<ResultDto> getResults(String username) {

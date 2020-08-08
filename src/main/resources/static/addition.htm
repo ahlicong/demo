@@ -1,3 +1,5 @@
+<title>加減</title>
+<meta charset="utf-8">
 <script src="js/jquery-3.5.1.min.js"></script>
 <script lang="javascript">
 var username = window.location.href.split("=")[1];
@@ -20,18 +22,13 @@ function startQuiz() {
 	correct = 0;
 
 	var sheet = "";
-	var int1, int2, operator, answer;
+	var int1, int2, answer;
 	for (var i = 0; i < total; i++) {
 		do {
 			int1 = genInt();
 			int2 = genInt();
-			operator = genOperator();
-			q = int1 + " " + operator + " " + int2;
+			q = int1 + " " + genOperand() + " " + int2;
 			answer = eval(q);
-			//if (operator == "+")
-			//	answer = int1 + int2;
-			//else
-			//	answer = int1 - int2;
 		} while(answer < MIN || answer > MAX);
 		sheet += "<font color=grey>" + (i+1) + ": </font>" + q + " = ";
 		sheet += "<input id=q" + i + " ans=" + answer + " size=3 maxlength=2 onblur=answer(this) />";
@@ -48,7 +45,7 @@ function genInt() {
 	return Math.round(Math.random() * RANGE) + MIN;
 }
 
-function genOperator() {
+function genOperand() {
 	if (subtraction)
 		return Math.random() > 0.5 ? "+" : "-";
 	return "+";
@@ -88,6 +85,7 @@ function saveResult() {
 		type: "post",
 		data: JSON.stringify({
 			"username": username,
+			"operand": subtraction ? "+-" : "+",
 		    "correct": correct,
 		    "total": total,
 		    "consume": consume

@@ -1,17 +1,14 @@
 <title>demo</title>
-
+<meta charset="utf-8">
 <body>
-	<input id="username" />
-	<input type="button" onclick="updateUsername()" value="update username" />
-	<br>
-	<a href="#" onclick="navigate('greeting')">问候</a>
-	<br>
-	<a href="#" onclick="navigate('quiz.htm')">加减</a>
-	<a href="#" onclick="navigate('results.htm')">成绩单</a>
-	<a href="#" onclick="navigate('quiz.htm')">排行榜</a>
-	<br>
-	<a href="#" onclick="navigate('arithmatics.htm')">乘除</a>
-	<br> licong75@qq.com
+	<input id="username" /><br>
+	<input type="button" onclick="updateUsername()" value="更改名字" /><br>
+	<!-- <a href="#" onclick="navigate('greeting')">问候</a><br> -->
+	<a href="#" onclick="navigate('addition.htm')">加减</a><br>
+	<a href="#" onclick="navigate('multiply.htm')">乘除</a><br>
+	<a href="#" onclick="navigate('results.htm')">成绩单</a><br>
+	<a href="#" onclick="navigate('results.htm')">排行榜</a><br>
+	licong75@qq.com
 
 	<script>
 		var username = window.location.href.split("=")[1];

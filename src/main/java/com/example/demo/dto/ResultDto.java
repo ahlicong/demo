@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class ResultDto {
 	private String username;
+	private String operand;
 	private int correct;
 	private int total;
 	private int consume;
@@ -15,6 +16,14 @@ public class ResultDto {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getOperand() {
+		return operand;
+	}
+
+	public void setOperand(String operand) {
+		this.operand = operand;
 	}
 
 	public int getCorrect() {

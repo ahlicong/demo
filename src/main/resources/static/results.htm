@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>Angular JS Includes</title>
-
+<title>成绩单</title>
+<meta charset="utf-8">
 <style>
 table, th, td {
 	border: 1px solid grey;
@@ -20,22 +20,24 @@ table tr:nth-child(even) {
 </head>
 
 <body>
-	<h2>results</h2>
+	<h2>成绩单</h2>
 	<div ng-app="resultsApp" ng-controller="resultsController">
 
 		<table>
 			<tr>
-				<th>username</th>
-				<th>total</th>
-				<th>correct</th>
-				<th>score</th>
-				<th>consume</th>
-				<th>speed</th>
-				<th>createTime</th>
+				<th>名字</th>
+				<th>运算</th>
+				<th>总</th>
+				<th>正确</th>
+				<th>分</th>
+				<th>耗时</th>
+				<th>速度</th>
+				<th>时间</th>
 			</tr>
 
 			<tr ng-repeat="result in results">
 				<td>{{ result.username }}</td>
+				<td>{{ result.operand }}</td>
 				<td>{{ result.total }}</td>
 				<td>{{ result.correct }}</td>
 				<td>{{ 100 * result.correct / result.total }}</td>
