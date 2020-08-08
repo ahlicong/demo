@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>Angular JS Includes</title>
+
+<style>
+table, th, td {
+	border: 1px solid grey;
+	border-collapse: collapse;
+	padding: 5px;
+}
+
+table tr:nth-child(odd) {
+	background-color: #f2f2f2;
+}
+
+table tr:nth-child(even) {
+	background-color: #ffffff;
+}
+</style>
+</head>
+
+<body>
+	<h2>results</h2>
+	<div ng-app="resultsApp" ng-controller="resultsController">
+
+		<table>
+			<tr>
+				<th>username</th>
+				<th>total</th>
+				<th>correct</th>
+				<th>score</th>
+				<th>consume</th>
+				<th>speed</th>
+				<th>createTime</th>
+			</tr>
+
+			<tr ng-repeat="result in results">
+				<td>{{ result.username }}</td>
+				<td>{{ result.total }}</td>
+				<td>{{ result.correct }}</td>
+				<td>{{ 100 * result.correct / result.total }}</td>
+				<td>{{ result.consume }}</td>
+				<td>{{ result.consume / result.total }}</td>
+				<td>{{ result.createTime }}</td>
+			</tr>
+		</table>
+	</div>
+
+	<script src="js/angular.min.js"></script>
+	<script>
+		var username = window.location.href.split("=")[1];
+		if (username == null) {
+			username = "guest";
+		}
+
+		var app = angular.module('resultsApp', []);
+		app.controller('resultsController', function($scope, $http) {
+			var url = "/getResults?username=" + username;
+
+			$http.get(url).then(function(response) {
+				$scope.results = response.data;
+			});
+		});
+	</script>
+
+</body>
+</html>

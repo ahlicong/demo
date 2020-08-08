@@ -2,15 +2,14 @@
 <script lang="javascript">
 var username = window.location.href.split("=")[1];
 if (username == null) {
-	username = "guest";
-} else {
-	username = username.replace("#", "");
+	username = "liyingxin";
 }
 
 var MAX = 99, MIN = 1, RANGE = MAX - MIN;
 var total, remain, correct;
 var subtraction;
 var startTime, consume;
+
 function startQuiz() {
 	total = document.getElementById("total").value;
 	if (isNaN(parseInt(total)) || total < 1)

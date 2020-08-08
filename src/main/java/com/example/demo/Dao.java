@@ -1,6 +1,9 @@
 package com.example.demo;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +22,10 @@ public class Dao {
 	public void insertResult(ResultDto result) {
 		String sql = "insert into results(username, correct, total, consume, create_time) values(?,?,?,?,now())";
 		jdbcTemplate.update(sql, result.getUsername(), result.getCorrect(), result.getTotal(), result.getConsume());
+	}
+	
+	public List<ResultDto> getResults(String username) {
+		String sql = "select * from results where username=? order by create_time desc";
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper(ResultDto.class), username);
 	}
 }

@@ -1,17 +1,34 @@
 <title>demo</title>
 
-<script>
-var param = window.location.href.split("?")[1];
-function navigate(url) {
-	window.location = url + "?" + param;
-}
-</script>
-
 <body>
-<a href="#" onclick="navigate('greeting')">问候</a><br>
-<a href="#" onclick="navigate('quiz.htm')">加减</a>
-<a href="#" onclick="navigate('quiz.htm')">成绩单</a>
-<a href="#" onclick="navigate('quiz.htm')">排行榜</a><br>
-<a href="#" onclick="navigate('arithmatics.htm')">乘除</a><br>
-licong75@qq.com
+	<input id="username" />
+	<input type="button" onclick="updateUsername()" value="update username" />
+	<br>
+	<a href="#" onclick="navigate('greeting')">问候</a>
+	<br>
+	<a href="#" onclick="navigate('quiz.htm')">加减</a>
+	<a href="#" onclick="navigate('results.htm')">成绩单</a>
+	<a href="#" onclick="navigate('quiz.htm')">排行榜</a>
+	<br>
+	<a href="#" onclick="navigate('arithmatics.htm')">乘除</a>
+	<br> licong75@qq.com
+
+	<script>
+		var username = window.location.href.split("=")[1];
+		if (username == null) {
+			username = "guest";
+		}
+		document.getElementById("username").value = username;
+
+		function navigate(url) {
+			window.location = url + "?username="
+					+ document.getElementById("username").value;
+		}
+
+		function updateUsername() {
+			navigate("index.htm");
+		}
+	</script>
+
 </body>
+

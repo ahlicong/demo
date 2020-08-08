@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import com.example.demo.dto.Greeting;
 import com.example.demo.dto.ResultDto;
 
 @RestController
-public class GreetingController {
+public class Controller {
 
 	private static final String template = "Hello, %s!";
 	private final AtomicLong counter = new AtomicLong();
@@ -31,4 +32,10 @@ public class GreetingController {
 	public void saveResult(@RequestBody ResultDto result) {
 		dao.insertResult(result);
 	}
+	
+	@GetMapping("/getResults")
+	public List<ResultDto> getResults (@RequestParam(value = "username", defaultValue = "guest") String username) {
+		return dao.getResults(username);
+	}
+
 }
