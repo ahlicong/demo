@@ -1,11 +1,12 @@
 <title>乘除</title>
 <meta charset="utf-8">
+<input id="username" disabled />
+
 <script src="js/jquery-3.5.1.min.js"></script>
+<script src="js/common.js"></script>
 <script lang="javascript">
-	var username = window.location.href.split("=")[1];
-	if (username == null) {
-		username = "liyingxin";
-	}
+	var username = getUsername();
+	document.getElementById("username").value = username;
 
 	var MAX = 9, MIN = 1, RANGE = MAX - MIN;
 	var total, remain, correct;

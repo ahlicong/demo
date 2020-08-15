@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,10 +33,20 @@ public class Controller {
 	public void saveResult(@RequestBody ResultDto result) {
 		dao.insertResult(result);
 	}
-	
+
 	@GetMapping("/getResults")
-	public List<ResultDto> getResults (@RequestParam(value = "username", defaultValue = "guest") String username) {
+	public List<ResultDto> getResults(@RequestParam(value = "username") String username) {
 		return dao.getResults(username);
+	}
+
+	@RequestMapping("/refreshRanks")
+	public void refreshRanks() {
+		dao.refreshRanks();
+	}
+
+	@GetMapping("/getRanks")
+	public List<ResultDto> getRanks() {
+		return dao.getRanks();
 	}
 
 }

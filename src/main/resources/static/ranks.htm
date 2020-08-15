@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>成绩单</title>
+<title>排行榜</title>
 <meta charset="utf-8">
 <style>
 table, th, td {
@@ -24,6 +24,7 @@ table tr:nth-child(even) {
 
 		<table>
 			<tr>
+				<th>排名</th>
 				<th>名字</th>
 				<th>运算</th>
 				<th>总</th>
@@ -34,7 +35,8 @@ table tr:nth-child(even) {
 				<th>时间</th>
 			</tr>
 
-			<tr ng-repeat="result in results | orderBy:'createTime':true">
+			<tr ng-repeat="result in results | orderBy:orderRanks:true">
+				<td>{{ $index + 1 }}</td>
 				<td>{{ result.username }}</td>
 				<td>{{ result.operand }}</td>
 				<td>{{ result.total }}</td>
@@ -48,17 +50,18 @@ table tr:nth-child(even) {
 	</div>
 
 <script src="js/angular.min.js"></script>
-<script src="js/common.js"></script>
 <script>
-	var username = getUsername();
-
 	var app = angular.module('resultsApp', []);
 	app.controller('resultsController', function($scope, $http) {
-		var url = "/getResults?username=" + username;
+		var url = "/getRanks";
 
 		$http.get(url).then(function(response) {
 			$scope.results = response.data;
 		});
+
+		$scope.orderRanks = function(result) {
+			return 2 * result.correct - result.total;
+		}
 	});
 </script>
 
