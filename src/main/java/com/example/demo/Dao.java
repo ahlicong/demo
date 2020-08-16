@@ -33,7 +33,7 @@ public class Dao {
 	public void refreshRanks() {
 		String sql = "truncate table ranks;"
 				+ " insert into ranks(username, operand, correct, total, consume, create_time)"
-				+ " select username, operand, sum(correct), sum(total), sum(consume), now()"
+				+ " select username, operand, sum(correct), sum(total), sum(consume), max(create_time)"
 				+ " from results group by username, operand;";
 		jdbcTemplate.update(sql);
 	}
