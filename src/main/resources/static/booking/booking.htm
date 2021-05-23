@@ -1,0 +1,97 @@
+<title>预约</title>
+<meta charset="utf-8">
+<body>
+
+	<div ng-app="timeSlotsApp" ng-controller="timeSlotsController">
+		<table border="1">
+			<tr>
+				<th>今天</th>
+				<th>明天</th>
+			</tr>
+			<tr ng-repeat="timeSlot in timeSlots | orderBy:'time':false">
+				<td>
+					<div ng-if="timeSlot.slots[0].num > 1" style="background-color:grey">{{ timeSlot.time }}人数：{{ timeSlot.slots[0].num }}</div>
+					<div ng-if="timeSlot.slots[0].num < 2" onclick="selectSlot(this)" date="{{ timeSlot.slots[0].date }}" time="{{ timeSlot.time }}">{{ timeSlot.time }}人数：{{ timeSlot.slots[0].num }}</div></td>
+				<td>
+					<div ng-if="timeSlot.slots[1].num > 1" style="background-color:grey">{{ timeSlot.time }}人数：{{ timeSlot.slots[1].num }}</div>
+					<div ng-if="timeSlot.slots[1].num < 2" onclick="selectSlot(this)" date="{{ timeSlot.slots[1].date }}" time="{{ timeSlot.time }}">{{ timeSlot.time }}人数：{{ timeSlot.slots[1].num }}</div></td>
+			</tr>
+		</table>
+	</div>
+<script src="../js/angular.min.js"></script>
+<script src="../js/jquery-3.5.1.min.js"></script>
+<script src="../js/common.js"></script>
+<script>
+	var app = angular.module('timeSlotsApp', []);
+	app.controller('timeSlotsController', function($scope, $http) {
+		var url = "/getTimeSlots";
+
+		$http.get(url).then(function(response) {
+			$scope.timeSlots = response.data;
+		});
+	});
+</script>
+
+
+
+	<table id="availibility" border="1"></table>
+	<input type="button" onclick="book()" value="预约" />
+	<input type="button" onclick="myBookings()" value="我的预约"  disabled/>
+	<script>
+		var selectedSlot;
+		function selectSlot(slot) {
+			if (selectedSlot != null) {
+				selectedSlot.style.background = "white";
+			}
+			selectedSlot = slot;
+			selectedSlot.style.background = "green";
+		}
+
+		function book() {
+			if (selectedSlot == null) {
+				alert("先选择时间")
+			} else {
+				var username = getUsername();
+//				alert(username + " 预约 " + selectedSlot.attributes["date"].value + " " + selectedSlot.attributes["time"].value);
+				$.ajax({
+					url: "saveBooking",
+					type: "post",
+					data: JSON.stringify({
+						"username": username,
+						"date": selectedSlot.attributes["date"].value,
+					    "time": selectedSlot.attributes["time"].value
+					}),
+					contentType: "application/json",
+					success: function(data) {
+						alert(data);
+						window.location.reload();
+					}
+				});
+//					.error(function() { alert("error"); })
+
+			}
+		}
+
+		function render() {
+			var sheet = "<tr><th>今天</th><th>明天</th></tr>";
+			var days = [ "5-23", "5-24" ];
+			var timeSlots = [ "10:00", "10:30", "11:00", "11:30", "12:00",
+					"12:30", "13:00", "13:30", "14:00", "14:30", "15:00",
+					"15:30", "16:00", "16:30", "17:00", "17:30", "18:00",
+					"18:30" ];
+			//sheet += "<div id=" + day + " style=\"background-color:blue\">" + day + "</div><br/>";
+			for (var i = 0; i < timeSlots.length; i++) {
+				var timeSlot = timeSlots[i];
+				sheet += "<tr>";
+				for (var j = 0; j < days.length; j++) {
+					var day = days[j];
+					sheet += "<td><div onclick=\"selectSlot(this, '" + day
+							+ "', '" + timeSlot + "')\">" + timeSlot
+							+ "</div></td>";
+				}
+				sheet += "</tr>";
+			}
+			document.getElementById("availibility").innerHTML = sheet;
+		}
+	</script>
+</body>

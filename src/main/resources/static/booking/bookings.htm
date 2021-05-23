@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>预约</title>
+<meta charset="utf-8">
+<style>
+table, th, td {
+	border: 1px solid grey;
+	border-collapse: collapse;
+	padding: 5px;
+}
+
+table tr:nth-child(odd) {
+	background-color: #f2f2f2;
+}
+
+table tr:nth-child(even) {
+	background-color: #ffffff;
+}
+</style>
+</head>
+
+<body>
+	<div ng-app="bookingsApp" ng-controller="bookingsController">
+
+		<table>
+			<tr>
+				<th>名字</th>
+				<th>日期</th>
+				<th>时间</th>
+			</tr>
+
+			<tr ng-repeat="booking in bookings | orderBy:'date':false | orderBy:'time':false">
+				<td>{{ booking.username }}</td>
+				<td>{{ booking.date }}</td>
+				<td>{{ booking.time }}</td>
+			</tr>
+		</table>
+	</div>
+
+<script src="../js/angular.min.js"></script>
+<script src="../js/common.js"></script>
+<script>
+	var app = angular.module('bookingsApp', []);
+	app.controller('bookingsController', function($scope, $http) {
+		var url = "/booking/getBookings?token=" + getUsername();
+
+		$http.get(url).then(function(response) {
+			$scope.bookings = response.data;
+		});
+	});
+</script>
+
+</body>
+</html>

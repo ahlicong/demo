@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.dto.BookingDto;
 import com.example.demo.dto.ResultDto;
 
 @Repository
@@ -43,4 +44,24 @@ public class Dao {
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<ResultDto>(ResultDto.class));
 	}
 
+	public void insertBooking(BookingDto booking) {
+		String sql = "insert into bookings(username, date, time, create_time) values(?,?,?,now())";
+		jdbcTemplate.update(sql, booking.getUsername(), booking.getDate(), booking.getTime());
+	}
+
+	public BookingDto getBooking(BookingDto booking) {
+		String sql = "select * from bookings where username=? and date=?";
+		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<BookingDto>(BookingDto.class),
+				booking.getUsername(), booking.getDate());
+	}
+	
+	public int getBookingCount(String date, String time) {
+		String sql = "select count(1) from bookings where date=? and time=?";
+		return jdbcTemplate.queryForObject(sql, Integer.class, date, time);
+	}
+	
+	public List<BookingDto> getBookings() {
+		String sql = "select * from bookings where date >= ?";
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookingDto>(BookingDto.class), Utils.today());
+	}
 }

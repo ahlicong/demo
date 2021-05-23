@@ -1,0 +1,19 @@
+<title>预约</title>
+<meta charset="utf-8">
+<body>
+	请输入昵称
+	<br>
+	<input id="username" maxlength="20" />
+	<br>
+	<input type="button" onclick="next()" value="下一步" />
+
+<script src="js/common.js"></script>
+<script>
+	function next() {
+		window.location = "booking.htm?username="
+				+ document.getElementById("username").value;
+	}
+</script>
+
+</body>
+
