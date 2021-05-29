@@ -56,12 +56,12 @@ public class Controller {
 	@PostMapping("/booking/saveBooking")
 	public String saveBooking(@RequestBody BookingDto booking) {
 		int count = dao.getBookingCount(booking.getDate(), booking.getTime());
-		if (count > 1) {
+		if (count > 2) {
 			return "预约已满";
 		}
 		try {
 			dao.getBooking(booking);
-			return "同一天只能预约一次";
+			return "同一天只能预约一次。如需更改时间，请先去 我的预约 取消原来的预约再重新预约";
 		} catch (Exception e) {
 			dao.insertBooking(booking);
 			return "预约成功";
@@ -86,10 +86,13 @@ public class Controller {
 	}
 
 	@GetMapping("/booking/getBookings")
-	public List<BookingDto> getBookings(@RequestParam(value = "token") String token) {
-		if ("牛魔王".equals(token)) {
-			return dao.getBookings();
-		}
-		return null;
+	public List<BookingDto> getBookings(@RequestParam(value = "username") String username) {
+		return dao.getBookings(username);
 	}
+
+	@PostMapping("/booking/cancelBooking")
+	public void cancelBooking(@RequestBody BookingDto booking) {
+		dao.cancelBooking(booking);
+	}
+
 }

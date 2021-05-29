@@ -54,14 +54,25 @@ public class Dao {
 		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<BookingDto>(BookingDto.class),
 				booking.getUsername(), booking.getDate());
 	}
-	
+
+	public void cancelBooking(BookingDto booking) {
+		String sql = "delete from bookings where username=? and date=?";
+		jdbcTemplate.update(sql, booking.getUsername(), booking.getDate());
+	}
+
 	public int getBookingCount(String date, String time) {
 		String sql = "select count(1) from bookings where date=? and time=?";
 		return jdbcTemplate.queryForObject(sql, Integer.class, date, time);
 	}
-	
-	public List<BookingDto> getBookings() {
+
+	public List<BookingDto> getBookings(String username) {
 		String sql = "select * from bookings where date >= ?";
-		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookingDto>(BookingDto.class), Utils.today());
+		if ("牛魔王".equals(username)) {
+			return jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookingDto>(BookingDto.class), Utils.today());
+		} else {
+			sql += " and username=?";
+			return jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookingDto>(BookingDto.class), Utils.today(),
+					username);
+		}
 	}
 }

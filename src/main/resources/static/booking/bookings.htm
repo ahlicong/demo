@@ -1,7 +1,8 @@
 <html>
 <head>
-<title>预约</title>
+<title>/爱心芭蕾婴幼儿游泳预约/爱心</title>
 <meta charset="utf-8">
+<meta name=viewport content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 <style>
 table, th, td {
 	border: 1px solid grey;
@@ -27,27 +28,49 @@ table tr:nth-child(even) {
 				<th>名字</th>
 				<th>日期</th>
 				<th>时间</th>
+				<th>取消</th>
 			</tr>
 
 			<tr ng-repeat="booking in bookings | orderBy:'date':false | orderBy:'time':false">
 				<td>{{ booking.username }}</td>
 				<td>{{ booking.date }}</td>
 				<td>{{ booking.time }}</td>
+				<td><button onclick="cancelBooking(this)" username="{{ booking.username }}" date="{{ booking.date }}" time="{{ booking.time }}">取消</button></td>
 			</tr>
 		</table>
 	</div>
 
 <script src="../js/angular.min.js"></script>
+<script src="../js/jquery-3.5.1.min.js"></script>
 <script src="../js/common.js"></script>
 <script>
 	var app = angular.module('bookingsApp', []);
 	app.controller('bookingsController', function($scope, $http) {
-		var url = "/booking/getBookings?token=" + getUsername();
+		var url = "/booking/getBookings?username=" + getUsername();
 
 		$http.get(url).then(function(response) {
 			$scope.bookings = response.data;
 		});
 	});
+
+	function cancelBooking(item) {
+		alert(item.attributes["username"].value + " 取消预约 " + item.attributes["date"].value + " " + item.attributes["time"].value);
+		$.ajax({
+			url: "cancelBooking",
+			type: "post",
+			data: JSON.stringify({
+				"username": item.attributes["username"].value,
+				"date": item.attributes["date"].value,
+			    "time": item.attributes["time"].value
+			}),
+			contentType: "application/json",
+			success: function(data) {
+//				alert(data);
+				window.location.reload();
+			}
+		});
+//					.error(function() { alert("error"); })
+	}
 </script>
 
 </body>
